@@ -2,9 +2,17 @@
   <div>
     <div id="external-events">
       <p>
-        <strong>Draggable Events</strong>
+        <strong>Events</strong>
       </p>
-
+      <div id="addEventModal" :class="{ 'modal': true }">
+      <div class="modal-content">
+        <label>Event Name:</label>
+        <input type="text" v-model="newEventName" />
+        <label>Image URL:</label>
+        <input type="text" v-model="newEventImageUrl" />
+        <button @click="handleAddEvent">Add Event</button>
+      </div>
+    </div>
 
       <div
         v-for="(value, key) in eventsMap"
@@ -15,25 +23,10 @@
         <div class="fc-event-main">{{ value[0] }}</div>
         <img :src="value[1]" /> 
       </div>
+      
 
     <!-- Modal for adding new event -->
-    <div id="addEventModal" :class="{ 'modal': true, 'show': showModal }">
-      <div class="modal-content">
-        <span class="close" @click="closeModal">&times;</span>
-        <label>Event Name:</label>
-        <input type="text" v-model="newEventName" />
-        <label>Image URL:</label>
-        <input type="text" v-model="newEventImageUrl" />
-        <button @click="handleAddEvent">Add Event</button>
-      </div>
-    </div>
-      
-      
 
-      <!-- <p>
-        <input type="checkbox" v-model="removeAfterDrop" />
-        <label>Remove after drop</label>
-      </p> -->
     </div>
 
     <div id="calendar-container">
@@ -57,7 +50,6 @@ export default {
     FullCalendar,
   },
   setup() {
-    const showModal = ref(false);
     const newEventName = ref('');
     const newEventImageUrl = ref('');
 
@@ -77,19 +69,10 @@ export default {
 
 
     const calendarOptions = ref({
+      initialView: 'timeGridDay', 
       eventContent: function(arg) {
         let titleEl = document.createElement('h3')
         titleEl.textContent = arg.event.title
-
-
-
-        let italicEl = document.createElement('i')
-
-        if (arg.event.extendedProps.isUrgent) {
-          italicEl.innerHTML = 'urgent event'
-        } else {
-          italicEl.innerHTML = 'normal event'
-        }
 
         let imageSource = arg.event.extendedProps.image;
         // let imgEl = { html: `<img src="${imageSource}" alt="Event 1" class="fc-event-image">` };
@@ -103,16 +86,9 @@ export default {
         return { domNodes: arrayOfDomNodes }
       },
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-
-      customButtons: {
-        addEventButton: {
-          text: 'Add Event',
-          click: openNewEventMenu
-        }
-      },
       
       headerToolbar: {
-        left: "addEventButton prev,next today",
+        left: "prev,next today",
         center: "title",
         right: "dayGridMonth,timeGridWeek,timeGridDay",
       },
@@ -121,20 +97,11 @@ export default {
       eventDrop: handleEventDrop,
     });
 
-    function openNewEventMenu() {
-      showModal.value = true;
-    }
-
-    function closeModal() {
-      showModal.value = false;
-    }
-
     function handleAddEvent() {
       eventsMap.value.set(newEventName.value, newEventImageUrl.value);
       console.log("adding event: " + eventsMap.value.get(newEventName.value));
       newEventName.value = '';
       newEventImageUrl.value = '';
-      closeModal();
     }
 
     function initializeExternalEvents() {
@@ -160,14 +127,11 @@ export default {
     return {
       // removeAfterDrop,
       calendarOptions,
-      showModal,
       newEventName,
       newEventImageUrl,
       eventsMap,
       calendarOptions,
       handleAddEvent,
-      closeModal
-
     };
   },
 };
@@ -208,21 +172,44 @@ html, body {
   margin: 20px auto;
 }
 
-/* Modal */
-.modal {
+<style>
+/* Modal Overlay */
+.modal-overlay {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 1000; /* Ensure it appears above other content */
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
 }
 
-.show {
-  display: block;
+/* Modal Container */
+.modal-container {
+  position: fixed;
+  z-index: 1001; /* Ensure it appears above the overlay */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fefefe; /* White background */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
 }
 
+/* Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 </style>
