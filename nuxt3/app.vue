@@ -8,25 +8,39 @@
 
       <div
         v-for="(value, key) in eventsMap"
-        :key="key"
+        :key="key" 
         class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event"
         :data-event="{title: key, image: value}"
       >
         <div class="fc-event-main">{{ value[0] }}</div>
-        <img :src="value[1]" :alt="value[0]" class="fc-event-image" />
-
+        <img :src="value[1]" /> 
       </div>
 
-      <p>
+    <!-- Modal for adding new event -->
+    <div id="addEventModal" :class="{ 'modal': true, 'show': showModal }">
+      <div class="modal-content">
+        <span class="close" @click="closeModal">&times;</span>
+        <label>Event Name:</label>
+        <input type="text" v-model="newEventName" />
+        <label>Image URL:</label>
+        <input type="text" v-model="newEventImageUrl" />
+        <button @click="handleAddEvent">Add Event</button>
+      </div>
+    </div>
+      
+      
+
+      <!-- <p>
         <input type="checkbox" v-model="removeAfterDrop" />
         <label>Remove after drop</label>
-      </p>
+      </p> -->
     </div>
 
     <div id="calendar-container">
       <FullCalendar ref="calendar" :options="calendarOptions" />
     </div>
   </div>
+  
 </template>
 
 <script>
@@ -43,14 +57,22 @@ export default {
     FullCalendar,
   },
   setup() {
-    const removeAfterDrop = ref(false);
+    const showModal = ref(false);
+    const newEventName = ref('');
+    const newEventImageUrl = ref('');
 
     const eventsMap = ref(new Map());
     eventsMap.value.set("School", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
-    eventsMap.value.set("Lunch", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
-    eventsMap.value.set("Park", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
-    eventsMap.value.set("Playground", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
-    eventsMap.value.set("Hospital", "https://source.unsplash.com/yE60zo2odas/100x100");
+    // eventsMap.value.set("Lunch", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
+    // eventsMap.value.set("Park", "https://source.unsplash.com/yE60zo2odas/100x100");
+    // eventsMap.value.set("Playground", "https://source.unsplash.com/yE60zo2odas/100x100");
+    // eventsMap.value.set("Hospital", "https://source.unsplash.com/yE60zo2odas/100x100");
+    // eventsMap.value.set("Dinner", "https://source.unsplash.com/yE60zo2odas/100x100");
+    // eventsMap.value.set("Sleep", "https://source.unsplash.com/yE60zo2odas/100x100");
+    // eventsMap.value.set("Bed", "https://source.unsplash.com/yE60zo2odas/100x100");
+    // eventsMap.value.set("Birthday Party", "https://source.unsplash.com/yE60zo2odas/100x100");
+    // eventsMap.value.set("Pool", "https://source.unsplash.com/yE60zo2odas/100x100");
+
     eventsMap.value.keys();
 
 
@@ -81,8 +103,16 @@ export default {
         return { domNodes: arrayOfDomNodes }
       },
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+
+      customButtons: {
+        addEventButton: {
+          text: 'Add Event',
+          click: openNewEventMenu
+        }
+      },
+      
       headerToolbar: {
-        left: "prev,next today",
+        left: "addEventButton prev,next today",
         center: "title",
         right: "dayGridMonth,timeGridWeek,timeGridDay",
       },
@@ -91,9 +121,21 @@ export default {
       eventDrop: handleEventDrop,
     });
 
-    onMounted(() => {
-      initializeExternalEvents();
-    });
+    function openNewEventMenu() {
+      showModal.value = true;
+    }
+
+    function closeModal() {
+      showModal.value = false;
+    }
+
+    function handleAddEvent() {
+      eventsMap.value.set(newEventName.value, newEventImageUrl.value);
+      console.log("adding event: " + eventsMap.value.get(newEventName.value));
+      newEventName.value = '';
+      newEventImageUrl.value = '';
+      closeModal();
+    }
 
     function initializeExternalEvents() {
       new Draggable(document.getElementById("external-events"), {
@@ -105,16 +147,27 @@ export default {
       });
     }
 
+    onMounted(() => {
+      initializeExternalEvents();
+    });
+
     function handleEventDrop(info) {
-      if (removeAfterDrop.value) {
-        info.draggedEl.parentNode.removeChild(info.draggedEl);
-      }
+      // if (removeAfterDrop.value) {
+      //   info.draggedEl.parentNode.removeChild(info.draggedEl);
+      // }
     }
 
     return {
-      removeAfterDrop,
+      // removeAfterDrop,
+      calendarOptions,
+      showModal,
+      newEventName,
+      newEventImageUrl,
       eventsMap,
       calendarOptions,
+      handleAddEvent,
+      closeModal
+
     };
   },
 };
@@ -154,4 +207,22 @@ html, body {
   max-width: 1100px;
   margin: 20px auto;
 }
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.show {
+  display: block;
+}
+
 </style>
