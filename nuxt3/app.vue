@@ -5,30 +5,16 @@
         <strong>Draggable Events</strong>
       </p>
 
-      <!-- <div
-        v-for="(event, index) in externalEvents"
-        :key="index"
-        class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event"
-        :data-event="event"
-      >
-        <img :src="event.image" :alt="event.title" class="fc-event-image" />
-        <div class="fc-event-main">{{ event.title }}</div>
-      </div> -->
-      <!-- <div id="DEBUG"> 
-        <ul>
-          <li v-for="(value, key) in eventsMap" :key="key">
-            {{ value }}
-          </li>
-        </ul>
-      </div> -->
+
       <div
         v-for="(value, key) in eventsMap"
         :key="key"
         class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event"
         :data-event="{title: key, image: value}"
       >
-        <img :src="value[1]" :alt="value[0]" class="fc-event-image" />
         <div class="fc-event-main">{{ value[0] }}</div>
+        <img :src="value[1]" :alt="value[0]" class="fc-event-image" />
+
       </div>
 
       <p>
@@ -60,14 +46,12 @@ export default {
     const removeAfterDrop = ref(false);
 
     const eventsMap = ref(new Map());
-    eventsMap.value.set("School", "https://source.unsplash.com/0Y4z13M_oV0/100x100");
-    eventsMap.value.set("Lunch", "https://source.unsplash.com/0Y4z13M_oV0/100x100");
+    eventsMap.value.set("School", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
+    eventsMap.value.set("Lunch", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
     eventsMap.value.set("Park", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
     eventsMap.value.set("Playground", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
     eventsMap.value.set("Hospital", "https://source.unsplash.com/yE60zo2odas/100x100");
     eventsMap.value.keys();
-
-    console.log(eventsMap.value) // map itself is fine
 
 
     const calendarOptions = ref({
@@ -75,12 +59,7 @@ export default {
         let titleEl = document.createElement('h3')
         titleEl.textContent = arg.event.title
 
-        let debugEl = document.createElement('p')
-        debugEl.textContent = arg
-        // debugEl.textContent = arg.getOwnPropertyNames()
-        // debugEl.textContent = arg.event
-        // debugEl.textContent = arg.event.getOwnPropertyNames()
-        console.log(arg)
+
 
         let italicEl = document.createElement('i')
 
