@@ -50,18 +50,22 @@ export default {
     FullCalendar,
   },
   setup() {
+    // if localStorage.get("data") // exists
+      // load
+    
+
     const newEventName = ref('');
     const newEventImageUrl = ref('');
 
     const eventsMap = ref(new Map());
-    eventsMap.value.set("School", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
-    // eventsMap.value.set("Lunch", "https://source.unsplash.com/BnavvlQCU1Q/100x100");
-    // eventsMap.value.set("Park", "https://source.unsplash.com/yE60zo2odas/100x100");
-    // eventsMap.value.set("Playground", "https://source.unsplash.com/yE60zo2odas/100x100");
-    // eventsMap.value.set("Hospital", "https://source.unsplash.com/yE60zo2odas/100x100");
-    // eventsMap.value.set("Dinner", "https://source.unsplash.com/yE60zo2odas/100x100");
-    // eventsMap.value.set("Sleep", "https://source.unsplash.com/yE60zo2odas/100x100");
-    // eventsMap.value.set("Bed", "https://source.unsplash.com/yE60zo2odas/100x100");
+    eventsMap.value.set("Speech", "https://d18vdu4p71yql0.cloudfront.net/libraries/noun-project/speech_10_g.svg");
+    eventsMap.value.set("OT", "https://ecdn.teacherspayteachers.com/thumbitem/OT-Heart-Clip-Art-5046926-1604703499/original-5046926-1.jpg");
+    eventsMap.value.set("School", "https://d18vdu4p71yql0.cloudfront.net/libraries/mulberry/school.svg.varianted-skin.svg");
+    eventsMap.value.set("Music", "https://d18vdu4p71yql0.cloudfront.net/libraries/noun-project/Music-124ac7f50d.svg");
+    eventsMap.value.set("Swimming Lesson", "https://t3.ftcdn.net/jpg/03/29/13/12/360_F_329131295_X8OOg1RI8iO0F2NSrixHEpiBh7hRegt2.webp");
+    eventsMap.value.set("Get Dressed", "https://static.vecteezy.com/system/resources/thumbnails/016/059/247/small_2x/cute-little-boy-wearing-clothes-get-dressed-daily-routine-activity-vector.jpg");
+    eventsMap.value.set("Shower", "https://d18vdu4p71yql0.cloudfront.net/libraries/arasaac/shower.png");
+    eventsMap.value.set("Put on Jammies", "https://as1.ftcdn.net/v2/jpg/04/34/49/42/1000_F_434494262_C98IB4jYPzt9Ml9CTKJuRuehIfVyZifc.jpg");
     // eventsMap.value.set("Birthday Party", "https://source.unsplash.com/yE60zo2odas/100x100");
     // eventsMap.value.set("Pool", "https://source.unsplash.com/yE60zo2odas/100x100");
 
@@ -69,7 +73,9 @@ export default {
 
 
     const calendarOptions = ref({
-      initialView: 'timeGridDay', 
+      initialView: 'timeGridDay',
+      slotDuration: '00:05:00',
+      snapDuration: '00:05:00',
       eventContent: function(arg) {
         let titleEl = document.createElement('h3')
         titleEl.textContent = arg.event.title
@@ -78,6 +84,8 @@ export default {
         // let imgEl = { html: `<img src="${imageSource}" alt="Event 1" class="fc-event-image">` };
         let imgEl = document.createElement("img")
         imgEl.src = imageSource;
+        imgEl.height = 50;
+        imgEl.width = 50;
 
         imgEl.alt = ""; // alt text
         imgEl.class = "fc-event-image";
@@ -154,11 +162,24 @@ html, body {
   padding: 0 10px;
   border: 1px solid #ccc;
   background: #eee;
+  overflow-y: auto; /* Make the sidebar scrollable */
+  max-height: calc(100vh - 40px); /* Set maximum height to fit the viewport minus top and bottom margin */
 }
 
 #external-events .fc-event {
   cursor: move;
   margin: 3px 0;
+}
+
+#external-events .fc-event img {
+  max-width: 50%; /* Ensure images don't exceed their container width */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Scale the images within calendar events */
+.fc-event .fc-event-image {
+  max-width: 100px; /* Set maximum width for the image */
+  height: auto; /* Maintain aspect ratio */
 }
 
 #calendar-container {
@@ -168,48 +189,14 @@ html, body {
 }
 
 #calendar {
-  max-width: 1100px;
+  max-width: 10;
   margin: 20px auto;
 }
 
-<style>
-/* Modal Overlay */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  z-index: 1000; /* Ensure it appears above other content */
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+/* Scale the images within calendar events */
+#calendar-container .fc-event .fc-event-image img {
+  max-width: 100px; /* Set maximum width for the image */
+  height: auto; /* Maintain aspect ratio */
 }
 
-/* Modal Container */
-.modal-container {
-  position: fixed;
-  z-index: 1001; /* Ensure it appears above the overlay */
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fefefe; /* White background */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-
-/* Close Button */
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
 </style>
