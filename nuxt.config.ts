@@ -2,9 +2,6 @@
 // export default defineNuxtConfig({
 
 // })
-export default {
-    build: {
-      // Specify the output directory
-      dir: 'docs/.nuxt/dist'
-    }
-  }
+module.exports = {
+  publicPath: '/daily-calendar/'
+}
