@@ -14,19 +14,17 @@
       </div>
     </div>
 
-      <div
-        v-for="(value, key) in eventsMap"
-        :key="key" 
-        class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event"
-        :data-event="{title: key, image: value}"
-      >
+    <div
+      v-for="(value, key) in eventsMap"
+      :key="key" 
+      class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event"
+    >
+      <div class="event-container">
+        <button @click="handleDeleteEvent(value[0])">X</button>
         <div class="fc-event-main">{{ value[0] }}</div>
-        <img :src="value[1]" /> 
       </div>
-      
-
-    <!-- Modal for adding new event -->
-
+      <img :src="value[1]" /> 
+    </div>
     </div>
 
     <div id="calendar-container">
@@ -73,12 +71,17 @@ export default {
 
 
     const calendarOptions = ref({
+
       initialView: 'timeGridDay',
       slotDuration: '00:05:00',
       snapDuration: '00:05:00',
+      eventClick: function(info) {
+        info.event.remove();
+      },
+      
       eventContent: function(arg) {
         let titleEl = document.createElement('h3')
-        titleEl.textContent = arg.event.title
+        titleEl.textContent = arg.event.title.substring(2)
 
         let imageSource = arg.event.extendedProps.image;
         // let imgEl = { html: `<img src="${imageSource}" alt="Event 1" class="fc-event-image">` };
@@ -111,6 +114,9 @@ export default {
       newEventName.value = '';
       newEventImageUrl.value = '';
     }
+    function handleDeleteEvent(key) {
+      eventsMap.value.delete(key);;
+    }
 
     function initializeExternalEvents() {
       new Draggable(document.getElementById("external-events"), {
@@ -140,6 +146,7 @@ export default {
       eventsMap,
       calendarOptions,
       handleAddEvent,
+      handleDeleteEvent
     };
   },
 };
@@ -198,5 +205,21 @@ html, body {
   max-width: 100px; /* Set maximum width for the image */
   height: auto; /* Maintain aspect ratio */
 }
+
+.event-container {
+  display: flex;
+  align-items: center; /* Center vertically */
+}
+
+.event-container button {
+  margin-right: 5px; /* Adjust the spacing between the button and the event name */
+}
+
+/* Adjust vertical alignment of event titles */
+.fc-event-title {
+  margin-top: 10000; /* Remove any top margin */
+  line-height: 1; /* Set line height to 1 for tight vertical alignment */
+}
+
 
 </style>
