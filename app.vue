@@ -57,6 +57,7 @@ export default {
     const newEventName = ref('');
     const newEventImageUrl = ref('');
     const calendarOptions = ref({
+      eventColor: "#fab4d9",
 
       initialView: 'timeGridDay',
       slotDuration: '00:05:00',
@@ -205,6 +206,8 @@ body > div > div,
   height: auto; /* Maintain aspect ratio */
 }
 
+
+
 #calendar-container {
   position: relative;
   z-index: 1;
@@ -236,6 +239,15 @@ body > div > div,
 .fc-event-title {
   margin-top: 10000; /* Remove any top margin */
   line-height: 1; /* Set line height to 1 for tight vertical alignment */
+}
+
+.fc-daygrid-block-event {
+  background-color: #fab4d9;
+  border: solid 1px #fab4d9;
+}
+
+.fc-event-main {
+  color: #000000 !important;
 }
 
 
