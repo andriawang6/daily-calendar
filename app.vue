@@ -58,6 +58,7 @@ export default {
     const newEventImageUrl = ref('');
     const calendarOptions = ref({
       eventColor: "#fab4d9",
+      longPressDelay: 0, 
 
       initialView: 'timeGridDay',
       slotDuration: '00:05:00',
