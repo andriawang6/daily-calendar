@@ -167,6 +167,13 @@ html, body {
   padding: 0;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
+  height: 100%;
+}
+
+body > div,
+body > div > div,
+.fc {
+  height: 100%;
 }
 
 #external-events {
@@ -202,6 +209,7 @@ html, body {
   position: relative;
   z-index: 1;
   margin-left: 200px;
+  height: 100%;
 }
 
 #calendar {
